@@ -29,7 +29,6 @@ for(i in 1:6)
   lagdata = datacsv[datacsv$Code==acc.lag[i],]
   lagmean = mean(as.integer((lagdata$ResponseCode==51|lagdata$ResponseCode==52)))
   acc.acc[i] = lagmean
-  #acc.zscore[i] = (lagmean - acc.mu)/acc.sigma
 }
 
 
@@ -281,23 +280,13 @@ for(i in 1:lag_count)
 #MIMatrix[is.na(MIMatrix)] <- 0
 res <- data.frame(MIMatrix, as.factor(MILag), as.factor(MIVis), as.factor(MISub), MICount)
 colnames(res) <- c("MI", "Lag", "Vis", "Sub", "Count")
-# res[res$Lag==6,]$Lag = 5
-# res[res$Lag==1,]$Lag = 1
-# res[res$Lag==3,]$Lag = 2
-# res[res$Lag==4,]$Lag = 2
-# res <- droplevels(res[res$Lag==2|res$Lag==5,])
+
 
 contrasts(res$Lag) = rbind(diag(5)[1:5,],c(-0,-0,-0,-0,-0))#rbind(diag(5), c(-1,-1,-1,-1,-1))
-#contrasts(res$Vis) = contr.sum(6)
-#contrasts(res$Vis) = rbind(diag(5)[1:2,],c(-1,-1,-1,-1,-1), diag(5)[3:5,])#rbind(diag(5), c(-1,-1,-1,-1,-1))
-#contrasts(res$Vis) = rbind(c(-0,-0,-0,-0,-0),diag(5)[1:5,])
-#contrasts(res$Vis) = rbind(c(1,0),c(0,0), c(0,1))#rbind(diag(5), c(-1,-1,-1,-1,-1))
-# contrasts(res$Lag) = rbind(1,0)
+
 contrasts(res$Vis) = rbind(1,0)
 V = res$Vis
 L = res$Lag
-#V = dummy(res$Vis, c("1", "2", "3", "4", "5", "6"))
-#L = dummy(res$Lag, c("1", "2", "3", "4", "5"))
 
 res.lag.model = lmer(MI~ L + Count + (1|Sub), res, REML=FALSE)
 res.lag.null = lmer(MI~ Count + (1|Sub), res, REML=FALSE)
@@ -311,19 +300,6 @@ res.int.model = lmer(MI~ V+L+V:L + Count + (1|Sub), res, REML=FALSE)
 res.int.null = lmer(MI~ V+L + Count + (1|Sub), res, REML=FALSE)
 res.int.anova = anova(res.int.null, res.int.model)
 
-##No count
-
-# res.lag.model = lmer(MI~ L + (1|Sub), res, REML=FALSE)
-# res.lag.null = lmer(MI~  (1|Sub), res, REML=FALSE)
-# res.lag.anova = anova(res.lag.null, res.lag.model)
-# 
-# res.vis.model = lmer(MI~ V + (1|Sub), res, REML=FALSE)
-# res.vis.null = lmer(MI~  (1|Sub), res, REML=FALSE)
-# res.vis.anova = anova(res.vis.null, res.vis.model)
-# 
-# res.int.model = lmer(MI~ V+L+V:L + (1|Sub), res, REML=FALSE)
-# res.int.null = lmer(MI~ V+L + (1|Sub), res, REML=FALSE)
-# res.int.anova = anova(res.int.null, res.int.model)
 
 toDataFrame <- function(matrix)
 {

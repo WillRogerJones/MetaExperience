@@ -4,5 +4,5 @@ This is the code for the paper: "Modelling the Simultaneous Encoding/ Serial Exp
 # Here be dragons
 This is research code I wrote circa 2018 that is in sore need of tidying up. 
 
-If you should use this repo and run into problems, feel free to ping me an email or submit a pull request to the repository and I'll help out as best I can. 
+If you should use this repo and run into problems, feel free to ping me an email or submit a pull request to the repository, I'll help out as best I can. 
 
